@@ -30,8 +30,12 @@ class extra(commands.Cog):
     async def download(self, ctx, url):
         YDL_OPTIONS = {'age_limit' : 21,
                        'format': 'bestaudio/best',
-                       'outtmpl' : 'E:\Coding Projects\Geisha\GeishaExtracts\%(title)s.%(ext)s',
-                       #E:\Coding Projects\Geisha\GeishaExtracts\
+                       #Linux Version
+                       'outtmpl' : '/home/tart/Geisha/GeishaExtracts/%(title)s.%(ext)s',
+
+                       #Windows Version
+                       #'outtmpl' : 'E:\Coding Projects\Geisha\GeishaExtracts\%(title)s.%(ext)s',
+
                        'postprocessors': [{
                            'key': 'FFmpegExtractAudio',
                            'preferredcodec': 'mp3',
@@ -40,14 +44,25 @@ class extra(commands.Cog):
         
         with yt_dlp.YoutubeDL(YDL_OPTIONS) as ydl:
             ydl.download(url)
-            dirList = os.listdir('E:\Coding Projects\Geisha\GeishaExtracts')
+            #Linux
+            dirList = os.listdir('/home/tart/Geisha/GeishaExtracts/')
+
+            #Windows
+            #dirList = os.listdir('E:\Coding Projects\Geisha\GeishaExtracts')
             fileName = dirList[0]
 
         await ctx.send("Please Wait...")
-        await ctx.send(file=discord.File(f'E:\Coding Projects\Geisha\GeishaExtracts\{fileName}'))
+        #Linux
+        await ctx.send(file=discord.File(f'/home/tart/Geisha/GeishaExtracts/{fileName}'))
 
-        if os.path.exists(f'E:\Coding Projects\Geisha\GeishaExtracts\{fileName}'):
-            os.remove(f'E:\Coding Projects\Geisha\GeishaExtracts\{fileName}')
+        if os.path.exists(f'/home/tart/Geisha/GeishaExtracts/{fileName}'):
+            os.remove(f'/home/tart/Geisha/GeishaExtracts/{fileName}')
+
+        #Windows
+        #await ctx.send(file=discord.File(f'E:\Coding Projects\Geisha\GeishaExtracts\{fileName}'))
+
+        #if os.path.exists(f'E:\Coding Projects\Geisha\GeishaExtracts\{fileName}'):
+            #os.remove(f'E:\Coding Projects\Geisha\GeishaExtracts\{fileName}')
 
         
 
