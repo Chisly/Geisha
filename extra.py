@@ -31,7 +31,7 @@ class extra(commands.Cog):
         YDL_OPTIONS = {'age_limit' : 21,
                        'format': 'bestaudio/best',
                        #Linux Version
-                       'outtmpl' : '/home/tart/Geisha/GeishaExtracts/%(title)s.%(ext)s',
+                       'outtmpl' : '/home/badpi/Geisha/GeishaExtracts/%(title)s.%(ext)s',
 
                        #Windows Version
                        #'outtmpl' : 'E:\Coding Projects\Geisha\GeishaExtracts\%(title)s.%(ext)s',
@@ -45,7 +45,7 @@ class extra(commands.Cog):
         with yt_dlp.YoutubeDL(YDL_OPTIONS) as ydl:
             ydl.download(url)
             #Linux
-            dirList = os.listdir('/home/tart/Geisha/GeishaExtracts/')
+            dirList = os.listdir('/home/badpi/Geisha/GeishaExtracts/')
 
             #Windows
             #dirList = os.listdir('E:\Coding Projects\Geisha\GeishaExtracts')
@@ -53,10 +53,10 @@ class extra(commands.Cog):
 
         await ctx.send("Please Wait...")
         #Linux
-        await ctx.send(file=discord.File(f'/home/tart/Geisha/GeishaExtracts/{fileName}'))
+        await ctx.send(file=discord.File(f'/home/badpi/Geisha/GeishaExtracts/{fileName}'))
 
-        if os.path.exists(f'/home/tart/Geisha/GeishaExtracts/{fileName}'):
-            os.remove(f'/home/tart/Geisha/GeishaExtracts/{fileName}')
+        if os.path.exists(f'/home/badpi/Geisha/GeishaExtracts/{fileName}'):
+            os.remove(f'/home/badpi/Geisha/GeishaExtracts/{fileName}')
 
         #Windows
         #await ctx.send(file=discord.File(f'E:\Coding Projects\Geisha\GeishaExtracts\{fileName}'))
