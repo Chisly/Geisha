@@ -25,7 +25,6 @@ class extra(commands.Cog):
     async def comfort(self, ctx):
         await ctx.send("It'll all work out in the end and know that I will always love you.")
 
-
     @commands.command()
     async def download(self, ctx, url):
         YDL_OPTIONS = {'age_limit' : 21,
