@@ -1,3 +1,3 @@
 # Geisha
 
-The One And Only
+The One and Only
