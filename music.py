@@ -102,22 +102,21 @@ class music(commands.Cog):
             await voice_channel.connect()
                                             #put -re before -reconnect 1
         FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
-        YDL_OPTIONS = {'format' : 'm4a/bestaudio/best', 'age_limit' : 21, 'dump_single_json' : 'True', 'extract_flat' : 'True'}
+        YDL_OPTIONS = {'format' : 'bestaudio/best', 'age_limit' : 21} #'dump_single_json' : 'True', 'extract_flat' : 'True'
         
         with yt_dlp.YoutubeDL(YDL_OPTIONS) as ydl:
-            #if NOT a playlist then do this
-            if not(re.search(listgex, url)):
+            #if NOT a playlist then do this                                                                                         
+            if not(re.search(listgex, url)):             
                 try:
                     info = ydl.extract_info(url, download=False)
                 except:
-                    info = ydl.extract_info(f"ytsearch:{url}", download=False)['entries'][0]
-
+                    info = ydl.extract_info(f"scsearch:{url}", download=False)['entries'][0] #ytsearch:{url} (for youtube)
                 #This is old format to get direct link (doesn't work)
                 #for item in info['formats']:
                     #if(re.search(vidgex, item['url'])):
                         #url2 = item['url']
                         #break
-                        
+
                 info = ydl.sanitize_info(info)
                 if url2 == None:
                     url2 = info['url']
