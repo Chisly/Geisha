@@ -4,6 +4,7 @@ import yt_dlp
 import random
 import re
 import json
+import time
 
 queue = []
 track = []
@@ -44,7 +45,8 @@ class music(commands.Cog):
         if ctx.voice_client is None:
             await ctx.send("I've already been abandoned.")
         else:
-            await ctx.voice_client.disconnect()
+            await ctx.voice_client.disconnect(force=True)
+            ctx.voice_client.cleanup()
             await ctx.send("Bye Bye!")
 
     @commands.command()
@@ -92,7 +94,7 @@ class music(commands.Cog):
         global nowPlaying
         url2 = None
         #vidgex = re.compile("=251&")
-        listgex = re.compile("playlist")
+        listgex = re.compile("sets") #"playlist"
 
         if ctx.author.voice is None:
             await ctx.send("Join a voice channel!")
@@ -105,21 +107,22 @@ class music(commands.Cog):
         YDL_OPTIONS = {'format' : 'bestaudio/best', 'age_limit' : 21} #'dump_single_json' : 'True', 'extract_flat' : 'True'
         
         with yt_dlp.YoutubeDL(YDL_OPTIONS) as ydl:
-            #if NOT a playlist then do this                                                                                         
-            if not(re.search(listgex, url)):             
+            #if NOT a playlist then do this
+            if not(re.search(listgex, url)):
+            
                 try:
                     info = ydl.extract_info(url, download=False)
                 except:
-                    info = ydl.extract_info(f"scsearch:{url}", download=False)['entries'][0] #ytsearch:{url} (for youtube)
+                    info = ydl.extract_info(f"scsearch:{url}", download=False) #ytsearch:{url} (for youtube) scsearch for soundcloud
                 #This is old format to get direct link (doesn't work)
                 #for item in info['formats']:
                     #if(re.search(vidgex, item['url'])):
                         #url2 = item['url']
                         #break
-
+                        
                 info = ydl.sanitize_info(info)
                 if url2 == None:
-                    url2 = info['url']
+                    url2 = info['entries'][0]['url']
                     #url2 = info['formats'][0]['url']
 
                 source = await discord.FFmpegOpusAudio.from_probe(url2, ** FFMPEG_OPTIONS)
@@ -134,18 +137,18 @@ class music(commands.Cog):
             else:
                 print("Hooray!")
                 info = ydl.extract_info(url, download=False)
-                count = info.get("playlist_count")
+                count = info.get('playlist_count')
                 for x in range(count):
-                    for item in info['entries'][x]['formats']:
-                        if(re.search(vidgex, item['url'])):
-                            url2 = item['url']
-                            source = await discord.FFmpegOpusAudio.from_probe(url2, ** FFMPEG_OPTIONS)
-                            name = info['entries'][x]['title']
+                    url2 = info['entries'][x]['formats'][1]['url']
+                    source = await discord.FFmpegOpusAudio.from_probe(url2, ** FFMPEG_OPTIONS)
+                    name = info['entries'][x]['title']
 
-                            print(source) #debug line
+                    print(name) #debug line
+                    #print(url2)
 
-                            isList = True
-                            await self.loadsong(ctx, source, name, isList)
+                    isList = True
+                    await self.loadsong(ctx, source, name, isList)
+                    time.sleep(3)
 
     @commands.command()
     async def queue(self, ctx, show: int = 20):
